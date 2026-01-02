@@ -1,4 +1,4 @@
-## Passive Subdomain Enumeration
+## 1. Passive Subdomain Enumeration
 
 ### Subfinder
 
@@ -53,7 +53,7 @@ cat *_subs.txt | sort -u | anew all_subs.txt
 
 ---
 
-## Active Subdomain Discovery
+## 2. Active Subdomain Discovery
 
 ### Amass (Active)
 
@@ -151,7 +151,7 @@ cat all_subs.txt | httpx -silent -title -o live_subdomains.txt
 
 ---
 
-## Probing & Deep Recon
+## 3. Probing & Deep Recon
 
 ### HTTPX
 
@@ -173,7 +173,7 @@ cat live_websites.txt | grep -Ei "login|admin|signin|dashboard" | tee login_endp
 
 ---
 
-## JavaScript Analysis
+## 4. JavaScript Analysis
 
 ### JS Collection
 
@@ -210,7 +210,7 @@ cat js_files.txt | gf urls | tee sensitive_urls.txt
 
 ---
 
-## Google & GitHub Dorking
+## 5. Google & GitHub Dorking
 
 ### GitDorker
 
@@ -226,7 +226,7 @@ githound --config config.yml --subdomain-file live_websites.txt
 
 ---
 
-## URL Discovery & Crawling
+## 6. URL Discovery & Crawling
 
 ### Katana
 
@@ -254,7 +254,7 @@ feroxbuster -u https://target.com -d 2 -q -o ferox_urls.txt
 
 ---
 
-## Archive & Parameter Discovery
+## 7. Archive & Parameter Discovery
 
 ### GAU & Wayback
 
