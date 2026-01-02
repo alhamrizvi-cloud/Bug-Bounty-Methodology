@@ -314,6 +314,20 @@ kr scan https://api.target.com -w /usr/share/kiterunner/routes-large.kite -o api
 ```
 
 
+## Subdomain takeover 
+
+```bash
+subzy run --targets bmw_resolved.txt --hide-fails
+```
+
+```bash
+subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
+```
+
+```bash
+subzy run --targets bmw_resolved.txt | tee subzy_results.txt
+```
+
 
 
 
