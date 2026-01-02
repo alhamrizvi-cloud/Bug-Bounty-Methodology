@@ -64,7 +64,7 @@ amass enum -active -d target.com -o amass_active_subs.txt
 ### DNSx
 
 ```bash
-dnsx -d target.com -silent > dnsx_active_subs.txt
+cat bmw7.txt | dnsx -silent > bmw8.txt
 ```
 
 ### Gobuster (Wordlist)
