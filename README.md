@@ -61,12 +61,6 @@ cat *_subs.txt | sort -u | anew all_subs.txt
 amass enum -active -d target.com -o amass_active_subs.txt
 ```
 
-### Findomain (Active)
-
-```bash
-findomain -t target.com -a -q > findomain_active_subs.txt
-```
-
 ### DNSx
 
 ```bash
