@@ -178,10 +178,14 @@ cat live_websites.txt | grep -Ei "login|admin|signin|dashboard" | tee login_endp
 
 ### JS Collection
 
-```bash
-cat live_websites.txt | waybackurls | grep "\.js" | anew js_files.txt
-cat live_websites.txt | subjs | anew js_files.txt
-```
+# Passive JS
+cat live_websites.txt | gau --subs | grep -i "\.js$" | sort -u > js_passive.txt
+
+# Active JS
+katana -list live_websites.txt -jc -silent | grep -i "\.js$" | sort -u > js_active.txt
+
+# Combine
+cat js_passive.txt js_active.txt | sort -u > js_all.txt
 
 ### LinkFinder
 
