@@ -66,6 +66,7 @@ amass enum -active -d target.com -o amass_active_subs.txt
 ```bash
 cat bmw7.txt | dnsx -silent > bmw8.txt
 ```
+then combine and  resoleve using dnsx
 
 ### Gobuster (Wordlist)
 
