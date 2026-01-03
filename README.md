@@ -398,7 +398,17 @@ cat parameters.txt | kxss | dalfox pipe --custom-payload payloads.txt
 ```
 
 
-
+or
+### nuclei 
+```bash
+cat www.bmw.de.txt | kxss > reflected.txt
+$nuclei -l reflected.txt \
+  -t http/vulnerabilities/ \
+  -tags xss \
+  -severity low,medium,high,critical \
+  -c 60 -rate-limit 200 \
+  -o nuclei_xss_results.txt
+```
 
 
 
