@@ -410,5 +410,36 @@ $nuclei -l reflected.txt \
   -o nuclei_xss_results.txt
 ```
 
+## 12. My XSS workflow 
+
+### 1️⃣ Normalize & Deduplicate (uro)
+
+```bash
+cat parameter.txt | uro > uro.txt
+```
+
+### 2️⃣ Find Reflected Parameters (kxss)
+
+```bash
+cat uro.txt | kxss > reflected.txt
+```
+
+### 3️⃣ Reflection Confirmation (dalfox – optional)
+
+```bash
+dalfox file reflected.txt --only-discovery
+```
+
+### 4️⃣ Known XSS Patterns (nuclei – optional)
+
+```bash
+nuclei -l reflected.txt -t http/vulnerabilities/ -tags xss -severity medium,high,critical
+```
+
+### 5️⃣ Manual Payload Testing
+
+```bash
+cat reflected.txt | qsreplace '"><svg/onload=alert(1)>' | httpx -silent
+```
 
 
