@@ -1,3 +1,64 @@
+## 📌 Index
+
+- [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
+  - [Subfinder](#subfinder)
+  - [Amass (Passive)](#amass-passive)
+  - [Assetfinder](#assetfinder)
+  - [Findomain](#findomain)
+  - [Chaos](#chaos)
+  - [CRT.sh](#crtsh)
+  - [GitHub Subdomains](#github-subdomains)
+
+- [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
+  - [Amass (Active)](#amass-active)
+  - [DNSx](#dnsx)
+  - [Gobuster](#gobuster-wordlist)
+  - [ShuffleDNS](#shuffledns)
+
+- [3. Probing & Deep Recon](#3-probing--deep-recon)
+  - [HTTPX](#httpx)
+  - [HTTProbe](#httprobe)
+  - [Endpoint Filtering](#endpoint-filtering)
+
+- [4. JavaScript Analysis](#4-javascript-analysis)
+  - [JS Collection](#js-collection)
+  - [Mantra](#mantra)
+  - [LinkFinder](#linkfinder)
+  - [JSFinder](#jsfinder)
+  - [SecretFinder](#secretfinder)
+  - [GF Patterns](#gf-patterns)
+
+- [5. Google & GitHub Dorking](#5-google--github-dorking)
+  - [GitDorker](#gitdorker)
+  - [GitHound](#githound)
+
+- [6. URL Discovery & Crawling](#6-url-discovery--crawling)
+  - [Katana](#katana)
+  - [GoSpider](#gospider)
+  - [Hakrawler](#hakrawler)
+  - [Feroxbuster](#feroxbuster)
+
+- [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
+  - [GAU & Wayback](#gau--wayback)
+  - [ParamSpider](#paramspiderbest-1)
+  - [Arjun](#arjunbest-2)
+  - [FFUF](#ffufbest-3)
+
+- [Cloud Asset Enumeration](#cloud-asset-enumeration)
+
+- [API Enumeration](#api-enumeration)
+
+- [Subdomain Takeover](#subdomain-takeover)
+
+- [8. XSS Automation](#8-xss-automation)
+  - [Dalfox](#dalfox)
+  - [XSStrike](#xsstrike)
+  - [KXSS](#kxss)
+  - [GXSS](#gxss)
+
+
+
+
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
@@ -290,25 +351,26 @@ cat archived_urls.txt wayback_urls.txt | sort -u > all_archived_urls.txt
 cat all_archived_urls.txt | grep "=" | anew parameters.txt
 ```
 
-### ParamSpider
+### ParamSpider(best 1)
 
 ```bash
 python3 paramspider.py --domain target.com --exclude woff,css,png,jpg --output paramspider.txt
 ```
 
-### Arjun
+### Arjun(best 2)
 
 ```bash
 arjun -u https://target.com -oT arjun_params.txt
 ```
 
-### FFuF
+### FFuF(best 3)
 
 ```bash
 ffuf -u "https://target.com/page.php?FUZZ=test" -w /usr/share/wordlists/params.txt -o parameter_results.txt
 ```
 
 ---
+combine all these 3 into parameters.txt
 
 ## Cloud Asset Enumeration
 
@@ -341,6 +403,43 @@ subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
 ```bash
 subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 ```
+## 8. XSS Automation
+
+### **Dalfox**
+
+```bash
+dalfox file parameters.txt --custom-payload payloads.txt
+```
+
+
+### **XSStrike**
+
+```bash
+python3 xsstrike.py -f parameters.txt --payload payloads.txt
+```
+
+
+### **KXSS**
+
+```bash
+cat parameters.txt | kxss > reflected.txt
+```
+
+
+### **GXSS**
+
+```bash
+cat parameters.txt | gxss -o gxss.txt
+```
+
+
+### **Recommended combo**
+
+```bash
+cat parameters.txt | kxss | dalfox pipe --custom-payload payloads.txt
+```
+
+
 
 
 
