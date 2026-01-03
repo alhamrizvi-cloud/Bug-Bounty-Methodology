@@ -1,25 +1,15 @@
 ## 📌 Index
 
 - [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
-
 - [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
-
 - [3. Probing & Deep Recon](#3-probing--deep-recon)
-
 - [4. JavaScript Analysis](#4-javascript-analysis)
-
 - [5. Google & GitHub Dorking](#5-google--github-dorking)
-
 - [6. URL Discovery & Crawling](#6-url-discovery--crawling)
-
 - [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
-
 - [Cloud Asset Enumeration](#cloud-asset-enumeration)
-
 - [API Enumeration](#api-enumeration)
-
 - [Subdomain Takeover](#subdomain-takeover)
-
 - [8. XSS Automation](#8-xss-automation)
 
 
