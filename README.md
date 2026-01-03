@@ -191,6 +191,11 @@ sort -u js_active.txt > katanajs_clean.txt
 # Combine
 cat js_passive.txt katanajs_clean.txt | sort -u > js_all.txt
 ```
+or 
+### mantra
+```bash
+cat js_all.txt | mantra
+```
 
 ### LinkFinder
 
