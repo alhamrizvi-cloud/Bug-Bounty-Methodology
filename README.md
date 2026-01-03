@@ -7,10 +7,10 @@
 - [5. Google & GitHub Dorking](#5-google--github-dorking)
 - [6. URL Discovery & Crawling](#6-url-discovery--crawling)
 - [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
-- [Cloud Asset Enumeration](#cloud-asset-enumeration)
-- [API Enumeration](#api-enumeration)
-- [Subdomain Takeover](#subdomain-takeover)
-- [8. XSS Automation](#8-xss-automation)
+- [8. Cloud Asset Enumeration](#cloud-asset-enumeration)
+- [9.API Enumeration](#api-enumeration)
+- [10.Subdomain Takeover](#subdomain-takeover)
+- [11.XSS Automation](#8-xss-automation)
 
 
 
