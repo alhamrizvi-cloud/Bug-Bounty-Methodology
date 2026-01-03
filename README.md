@@ -1,13 +1,6 @@
 ## 📌 Index
 
 - [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
-  - [Subfinder](#subfinder)
-  - [Amass (Passive)](#amass-passive)
-  - [Assetfinder](#assetfinder)
-  - [Findomain](#findomain)
-  - [Chaos](#chaos)
-  - [CRT.sh](#crtsh)
-  - [GitHub Subdomains](#github-subdomains)
 
 - [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
   - [Amass (Active)](#amass-active)
