@@ -328,7 +328,7 @@ ffuf -u "https://target.com/page.php?FUZZ=test" -w /usr/share/wordlists/params.t
 ---
 combine all these 3 into parameters.txt
 
-## Cloud Asset Enumeration
+## 8. Cloud Asset Enumeration
 
 ```bash
 cloud_enum -k target.com -b buckets.txt -o cloud_enum_results.txt
@@ -339,14 +339,14 @@ s3scanner scan --bucket target-bucket
 
 ---
 
-## API Enumeration
+## 9.API Enumeration
 
 ```bash
 kr scan https://api.target.com -w /usr/share/kiterunner/routes-large.kite -o api_routes.txt
 ```
 
 
-## Subdomain takeover 
+## 10.Subdomain takeover 
 
 ```bash
 subzy run --targets bmw_resolved.txt --hide-fails
@@ -359,7 +359,7 @@ subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
 ```bash
 subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 ```
-## 8. XSS Automation
+## 11.XSS Automation
 
 ### **Dalfox**
 
