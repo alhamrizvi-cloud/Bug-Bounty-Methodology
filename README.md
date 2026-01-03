@@ -7,10 +7,11 @@
 - [5. Google & GitHub Dorking](#5-google--github-dorking)
 - [6. URL Discovery & Crawling](#6-url-discovery--crawling)
 - [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
-- [8. Cloud Asset Enumeration](#cloud-asset-enumeration)
-- [9.API Enumeration](#api-enumeration)
-- [10.Subdomain Takeover](#subdomain-takeover)
-- [11.XSS Automation](#8-xss-automation)
+- [8. Cloud Asset Enumeration](#8-cloud-asset-enumeration)
+- [9. API Enumeration](#9-api-enumeration)
+- [10. Subdomain Takeover](#10-subdomain-takeover)
+- [11. XSS Automation](#11-xss-automation)
+
 
 
 
@@ -339,14 +340,14 @@ s3scanner scan --bucket target-bucket
 
 ---
 
-## 9.API Enumeration
+## 9. API Enumeration
 
 ```bash
 kr scan https://api.target.com -w /usr/share/kiterunner/routes-large.kite -o api_routes.txt
 ```
 
 
-## 10.Subdomain takeover 
+## 10. Subdomain Takeover
 
 ```bash
 subzy run --targets bmw_resolved.txt --hide-fails
@@ -359,7 +360,8 @@ subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
 ```bash
 subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 ```
-## 11.XSS Automation
+
+## 11. XSS Automation
 
 ### **Dalfox**
 
