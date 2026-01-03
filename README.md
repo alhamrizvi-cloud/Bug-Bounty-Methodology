@@ -3,39 +3,16 @@
 - [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
 
 - [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
-  - [Amass (Active)](#amass-active)
-  - [DNSx](#dnsx)
-  - [Gobuster](#gobuster-wordlist)
-  - [ShuffleDNS](#shuffledns)
 
 - [3. Probing & Deep Recon](#3-probing--deep-recon)
-  - [HTTPX](#httpx)
-  - [HTTProbe](#httprobe)
-  - [Endpoint Filtering](#endpoint-filtering)
 
 - [4. JavaScript Analysis](#4-javascript-analysis)
-  - [JS Collection](#js-collection)
-  - [Mantra](#mantra)
-  - [LinkFinder](#linkfinder)
-  - [JSFinder](#jsfinder)
-  - [SecretFinder](#secretfinder)
-  - [GF Patterns](#gf-patterns)
 
 - [5. Google & GitHub Dorking](#5-google--github-dorking)
-  - [GitDorker](#gitdorker)
-  - [GitHound](#githound)
 
 - [6. URL Discovery & Crawling](#6-url-discovery--crawling)
-  - [Katana](#katana)
-  - [GoSpider](#gospider)
-  - [Hakrawler](#hakrawler)
-  - [Feroxbuster](#feroxbuster)
 
 - [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
-  - [GAU & Wayback](#gau--wayback)
-  - [ParamSpider](#paramspiderbest-1)
-  - [Arjun](#arjunbest-2)
-  - [FFUF](#ffufbest-3)
 
 - [Cloud Asset Enumeration](#cloud-asset-enumeration)
 
@@ -44,10 +21,6 @@
 - [Subdomain Takeover](#subdomain-takeover)
 
 - [8. XSS Automation](#8-xss-automation)
-  - [Dalfox](#dalfox)
-  - [XSStrike](#xsstrike)
-  - [KXSS](#kxss)
-  - [GXSS](#gxss)
 
 
 
