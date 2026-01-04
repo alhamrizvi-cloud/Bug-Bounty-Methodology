@@ -12,7 +12,7 @@
 - [10. Subdomain Takeover](#10-subdomain-takeover)
 - [11. XSS Automation](#11-xss-automation)
 - [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
-- [14. CMD Injection](#cmd-injection)
+- [14. CMD Injection](#14-cmd-injection)
 
 
 
