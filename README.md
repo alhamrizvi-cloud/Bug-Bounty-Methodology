@@ -1,20 +1,21 @@
-## 📌 Index
+## Index
 
-- [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
-- [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
-- [3. Probing & Deep Recon](#3-probing--deep-recon)
-- [4. JavaScript Analysis](#4-javascript-analysis)
-- [5. Google & GitHub Dorking](#5-google--github-dorking)
-- [6. URL Discovery & Crawling](#6-url-discovery--crawling)
-- [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
-- [8. Cloud Asset Enumeration](#8-cloud-asset-enumeration)
-- [9. API Enumeration](#9-api-enumeration)
-- [10. Subdomain Takeover](#10-subdomain-takeover)
-- [11. XSS Automation](#11-xss-automation)
-- [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
-- [14. CMD Injection](#14-cmd-injection)
+* [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
+* [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
+* [3. Probing & Deep Recon](#3-probing--deep-recon)
+* [4. JavaScript Analysis](#4-javascript-analysis)
+* [5. Google & GitHub Dorking](#5-google--github-dorking)
+* [6. URL Discovery & Crawling](#6-url-discovery--crawling)
+* [7. Archive & Parameter Discovery](#7-archive--parameter-discovery)
+* [8. Cloud Asset Enumeration](#8-cloud-asset-enumeration)
+* [9. API Enumeration](#9-api-enumeration)
+* [10. Subdomain Takeover](#10-subdomain-takeover)
+* [11. XSS Automation](#11-xss-automation)
+* [12. My XSS Workflow](#12-my-xss-workflow)
+* [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
+* [14. CMD Injection](#14-cmd-injection)
 
-
+---
 
 ## 1. Passive Subdomain Enumeration
 
@@ -51,10 +52,7 @@ chaos -d target.com -silent > chaos_subs.txt
 ### CRT.sh
 
 ```bash
-curl -s "https://crt.sh/?q=%25.target.com&output=json" \
-| jq -r '.[].name_value' \
-| sed 's/\*\.//g' \
-| anew crtsh_subs.txt
+curl -s "https://crt.sh/?q=%25.target.com&output=json" | jq -r '.[].name_value' | sed 's/\\*\\.//g' | anew crtsh_subs.txt
 ```
 
 ### GitHub Subdomains
@@ -79,14 +77,13 @@ cat *_subs.txt | sort -u | anew all_subs.txt
 amass enum -active -d target.com -o amass_active_subs.txt
 ```
 
-### DNSx
+### DNSX Resolve
 
 ```bash
 cat bmw7.txt | dnsx -silent > bmw8.txt
 ```
-then combine and  resoleve using dnsx
 
-### Gobuster (Wordlist)
+### Gobuster DNS
 
 ```bash
 gobuster dns -d target.com -w dns_wordlist.txt -o gobuster_subs.txt
@@ -106,70 +103,6 @@ cat *_active_subs.txt | sort -u > active_final.txt
 
 ---
 
-## Handling Single / Non-Wildcard Targets
-
-Used when scope allows only specific domains like `target.example.com`.
-
-### GAU
-
-```bash
-gau target.example.com | anew gau_results.txt
-```
-
-### Waybackurls
-
-```bash
-waybackurls target.example.com | anew wayback_results.txt
-```
-
-### Katana
-
-```bash
-katana -u target.example.com -silent -jc -o katana_results.txt
-```
-
-### Hakrawler
-
-```bash
-echo "https://target.example.com" | hakrawler -depth 2 -plain -js -out hakrawler_results.txt
-```
-
-### Merge URLs
-
-```bash
-cat *_results.txt | sort -u > urls_final.txt
-```
-
----
-
-## Additional Recon Techniques
-
-### Reverse DNS
-
-```bash
-dnsx -ptr -l resolved_subs.txt -resp-only -o reverse_dns.txt
-```
-
-### ASN Enumeration
-
-```bash
-amass intel -asn ASN_NUMBER -o asn_results.txt
-```
-
-### Cloud Asset Enumeration
-
-```bash
-cloud_enum -k target.com
-```
-
-### Live Asset Validation
-
-```bash
-cat all_subs.txt | httpx -silent -title -o live_subdomains.txt
-```
-
----
-
 ## 3. Probing & Deep Recon
 
 ### HTTPX
@@ -178,7 +111,7 @@ cat all_subs.txt | httpx -silent -title -o live_subdomains.txt
 httpx -l resolved_subs.txt -p 80,443,8080,8443 -silent -title -sc -ip -o live_websites.txt
 ```
 
-### HTTProbe
+### Httprobe
 
 ```bash
 cat resolved_subs.txt | httprobe > live_websites.txt
@@ -194,23 +127,17 @@ cat live_websites.txt | grep -Ei "login|admin|signin|dashboard" | tee login_endp
 
 ## 4. JavaScript Analysis
 
-### JS Collection
+### JavaScript Collection
 
-# Passive JS
 ```bash
-cat live_websites.txt | gau --subs | grep -i "\.js$" | sort -u > js_passive.txt
-
-# Active JS
-katana -list live_websites.txt -jc -silent | grep -i "\.js$" | sort -u > js_active.txt
-
+cat live_websites.txt | gau --subs | grep -i "\\.js$" | sort -u > js_passive.txt
+katana -list live_websites.txt -jc -silent | grep -i "\\.js$" | sort -u > js_active.txt
 sort -u js_active.txt > katanajs_clean.txt
-
-
-# Combine
 cat js_passive.txt katanajs_clean.txt | sort -u > js_all.txt
 ```
-or 
-### mantra
+
+### Mantra
+
 ```bash
 cat js_all.txt | mantra
 ```
@@ -308,26 +235,25 @@ cat archived_urls.txt wayback_urls.txt | sort -u > all_archived_urls.txt
 cat all_archived_urls.txt | grep "=" | anew parameters.txt
 ```
 
-### ParamSpider(best 1)
+### ParamSpider
 
 ```bash
 python3 paramspider.py --domain target.com --exclude woff,css,png,jpg --output paramspider.txt
 ```
 
-### Arjun(best 2)
+### Arjun
 
 ```bash
 arjun -u https://target.com -oT arjun_params.txt
 ```
 
-### FFuF(best 3)
+### FFUF
 
 ```bash
 ffuf -u "https://target.com/page.php?FUZZ=test" -w /usr/share/wordlists/params.txt -o parameter_results.txt
 ```
 
 ---
-combine all these 3 into parameters.txt
 
 ## 8. Cloud Asset Enumeration
 
@@ -346,208 +272,65 @@ s3scanner scan --bucket target-bucket
 kr scan https://api.target.com -w /usr/share/kiterunner/routes-large.kite -o api_routes.txt
 ```
 
+---
 
 ## 10. Subdomain Takeover
 
 ```bash
 subzy run --targets bmw_resolved.txt --hide-fails
-```
-
-```bash
 subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
-```
-
-```bash
 subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 ```
 
-## 11. XSS Automation
+---
 
-### **Dalfox**
+## 11. XSS Automation
 
 ```bash
 dalfox file parameters.txt --custom-payload payloads.txt
-```
-
-
-### **XSStrike**
-
-```bash
 python3 xsstrike.py -f parameters.txt --payload payloads.txt
-```
-
-
-### **KXSS**
-
-```bash
 cat parameters.txt | kxss > reflected.txt
-```
-
-
-### **GXSS**
-
-```bash
 cat parameters.txt | gxss -o gxss.txt
-```
-
-
-### **Recommended combo**
-
-```bash
 cat parameters.txt | kxss | dalfox pipe --custom-payload payloads.txt
 ```
 
+---
 
-or
-### nuclei 
-```bash
-cat www.bmw.de.txt | kxss > reflected.txt
-$nuclei -l reflected.txt \
-  -t http/vulnerabilities/ \
-  -tags xss \
-  -severity low,medium,high,critical \
-  -c 60 -rate-limit 200 \
-  -o nuclei_xss_results.txt
-```
-
-## 12. My XSS workflow 
-
-### 1️⃣ Normalize & Deduplicate (uro)
+## 12. My XSS Workflow
 
 ```bash
 cat parameter.txt | uro > uro.txt
-```
-
-### 2️⃣ Find Reflected Parameters (kxss)
-
-```bash
 cat uro.txt | kxss > reflected.txt
-```
-
-### 3️⃣ Reflection Confirmation (dalfox – optional)
-
-```bash
 dalfox file reflected.txt --only-discovery
-```
-
-### 4️⃣ Known XSS Patterns (nuclei – optional)
-
-```bash
 nuclei -l reflected.txt -t http/vulnerabilities/ -tags xss -severity medium,high,critical
+cat reflected.txt | qsreplace '\"><svg/onload=alert(1)>' | httpx -silent
 ```
 
-### 5️⃣ Manual Payload Testing
-
-```bash
-cat reflected.txt | qsreplace '"><svg/onload=alert(1)>' | httpx -silent
-```
+---
 
 ## 13. IDOR Parameter Fetch
-I recommend ChatGPT for this, copy the first 50 lines of your parameter.txt, use this prompt, i want to fetch only idor parameters, can u help me redue this unncessary parameters and send me command for this list?
+must have parameter.txt file
+copy the first 50 lines of ttxt file and send thius prompt to chatgpt " i want to fetch all IDOR parameters from this txt file and remove noisy params please give me command for this"
 ```bash
-
-grep -Ei "(\?|&)(VPNR|OutletID|page|session|wer|go2|bmw)=" www.bmw.de.txt > idor_only.txtGood question
-```
-
-## ✅ STEP 1: Remove obvious tracking params (lb*, gclid, tl)
-
-```bash
+grep -Ei "(\\?|&)(VPNR|OutletID|page|session|wer|go2|bmw)=" www.bmw.de.txt > idor_only.txt
 grep -Ev "lb(matchtype|creative|network|keyword)|gclid=|tl=" idor_only.txt > idor_clean1.txt
-```
-
----
-
-## ✅ STEP 2: Keep ONLY real IDOR parameters
-
-(we **drop `bmw=` and `go2=`** because they are content selectors, not IDOR)
-
-```bash
 grep -Ei "(VPNR=|OutletID=|session=|wer=)" idor_clean1.txt > idor_clean2.txt
-```
-
----
-
-## ✅ STEP 3: Normalize & remove duplicates
-
-```bash
 sort -u idor_clean2.txt > idor_final.txt
 ```
 
+---
+
 ## 14. CMD Injection
 
-### 📁 Assumption
-
-```
-parameter.txt   ← output from ParamSpider
-```
-
-## 1️⃣ Filter CMDi‑LIKELY PARAMETERS
-
-(very important – don’t scan everything)
-
+must have parameter.txt file
 ```bash
 grep -Ei "ip|host|ping|cmd|exec|shell|run|query" parameter.txt > cmdi_all.txt
-```
-
-## 2️⃣ Remove Duplicates
-
-```bash
 sort -u cmdi_all.txt > cmdi_unique.txt
-```
-
-## 3️⃣ Keep Only Valid Parameter URLs
-
-```bash
 grep "=" cmdi_unique.txt > cmdi_final.txt
-```
-
-##  5. Split into Chunks of 100 URLs
-
-```bash
 split -l 100 cmdi_final.txt cmdi_
-```
-
-Creates:
-
-```
-cmdi_aa
-cmdi_ab
-cmdi_ac
-...
-...
-
-## 5️⃣ SAFE FIRST COMMIX SCAN (100 URLs)
-
-```bash
 commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=1
-```
-
-## 6️⃣ DEEPER SCAN (ONLY IF SOMETHING LOOKS INTERESTING)
-
-```bash
 commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=2
-```
-
-## 7️⃣ BLIND / TIME‑BASED CMDi (LAST OPTION)
-
-```bash
 commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=3 --technique=t
-```
-
-## 8️⃣ MOVE TO NEXT 100
-
-```bash
 commix -m /home/alhamr/Downloads/bmw/results/cmdi_ab --batch --level=1
-```
-
-Repeat.
-
-## 9️⃣ SAVE RESULTS (RECOMMENDED)
-
-```bash
 commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=2 --output-dir=commix_results
 ```
-
-
-
-
