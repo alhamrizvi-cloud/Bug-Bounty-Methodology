@@ -11,7 +11,7 @@
 - [9. API Enumeration](#9-api-enumeration)
 - [10. Subdomain Takeover](#10-subdomain-takeover)
 - [11. XSS Automation](#11-xss-automation)
-
+- [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
 
 
 
@@ -441,5 +441,45 @@ nuclei -l reflected.txt -t http/vulnerabilities/ -tags xss -severity medium,high
 ```bash
 cat reflected.txt | qsreplace '"><svg/onload=alert(1)>' | httpx -silent
 ```
+
+## 13. IDOR Parameter Fetch
+I recommend ChatGPT for this, copy the first 50 lines of your parameter.txt, use this prompt, i want to fetch only idor parameters, can u help me redue this unncessary parameters and send me command for this list?
+```bash
+
+grep -Ei "(\?|&)(VPNR|OutletID|page|session|wer|go2|bmw)=" www.bmw.de.txt > idor_only.txtGood question
+```
+
+## ✅ STEP 1: Remove obvious tracking params (lb*, gclid, tl)
+
+```bash
+grep -Ev "lb(matchtype|creative|network|keyword)|gclid=|tl=" idor_only.txt > idor_clean1.txt
+```
+
+---
+
+## ✅ STEP 2: Keep ONLY real IDOR parameters
+
+(we **drop `bmw=` and `go2=`** because they are content selectors, not IDOR)
+
+```bash
+grep -Ei "(VPNR=|OutletID=|session=|wer=)" idor_clean1.txt > idor_clean2.txt
+```
+
+---
+
+## ✅ STEP 3: Normalize & remove duplicates
+
+```bash
+sort -u idor_clean2.txt > idor_final.txt
+```
+
+## 🔥 OPTIONAL: Extract **only param names** (for reporting)
+
+```bash
+grep -Eo "(VPNR|OutletID|session|wer)" idor_final.txt | sort -u
+```
+
+
+
 
 
