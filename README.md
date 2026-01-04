@@ -12,7 +12,7 @@
 - [10. Subdomain Takeover](#10-subdomain-takeover)
 - [11. XSS Automation](#11-xss-automation)
 - [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
-
+- [14. CMD Injection](#cmd-injection)
 
 
 
@@ -473,12 +473,80 @@ grep -Ei "(VPNR=|OutletID=|session=|wer=)" idor_clean1.txt > idor_clean2.txt
 sort -u idor_clean2.txt > idor_final.txt
 ```
 
-## 🔥 OPTIONAL: Extract **only param names** (for reporting)
+## 14. CMD Injection
 
-```bash
-grep -Eo "(VPNR|OutletID|session|wer)" idor_final.txt | sort -u
+### 📁 Assumption
+
+```
+parameter.txt   ← output from ParamSpider
 ```
 
+## 1️⃣ Filter CMDi‑LIKELY PARAMETERS
+
+(very important – don’t scan everything)
+
+```bash
+grep -Ei "ip|host|ping|cmd|exec|shell|run|query" parameter.txt > cmdi_all.txt
+```
+
+## 2️⃣ Remove Duplicates
+
+```bash
+sort -u cmdi_all.txt > cmdi_unique.txt
+```
+
+## 3️⃣ Keep Only Valid Parameter URLs
+
+```bash
+grep "=" cmdi_unique.txt > cmdi_final.txt
+```
+
+##  5. Split into Chunks of 100 URLs
+
+```bash
+split -l 100 cmdi_final.txt cmdi_
+```
+
+Creates:
+
+```
+cmdi_aa
+cmdi_ab
+cmdi_ac
+...
+...
+
+## 5️⃣ SAFE FIRST COMMIX SCAN (100 URLs)
+
+```bash
+commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=1
+```
+
+## 6️⃣ DEEPER SCAN (ONLY IF SOMETHING LOOKS INTERESTING)
+
+```bash
+commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=2
+```
+
+## 7️⃣ BLIND / TIME‑BASED CMDi (LAST OPTION)
+
+```bash
+commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=3 --technique=t
+```
+
+## 8️⃣ MOVE TO NEXT 100
+
+```bash
+commix -m /home/alhamr/Downloads/bmw/results/cmdi_ab --batch --level=1
+```
+
+Repeat.
+
+## 9️⃣ SAVE RESULTS (RECOMMENDED)
+
+```bash
+commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=2 --output-dir=commix_results
+```
 
 
 
