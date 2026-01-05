@@ -1,105 +1,103 @@
-This is an example of Information Disclosure Finding, change ?url=*.bmw.de/* into targeted domain and change output file 
-> bmw_all_urls.txt
 
 
-## CDX – Fetch All Archived URLs (bmw.de)
+> Replace `TARGET_DOMAIN` once and reuse everywhere.
 
 ```bash
-curl "https://web.archive.org/cdx/search/cdx?url=*.bmw.de/*&collapse=urlkey&output=text&fl=original" > bmw_all_urls.txt
+export TARGET_DOMAIN=bmw.de
 ```
-
-## Normalize + Deduplicate URLs
+## 1️⃣ Fetch ALL Archived URLs (CDX)
 
 ```bash
-cat bmw_all_urls.txt | uro > bmw_all_urls_clean.txt
+curl "https://web.archive.org/cdx/search/cdx?url=*.$TARGET_DOMAIN/*&collapse=urlkey&output=text&fl=original" > all_urls.txt
 ```
 
-## Grep Juicy / Sensitive Extensions
+## 2️⃣ Normalize + Deduplicate URLs
 
 ```bash
-grep -E '\.xls|\.xml|\.xlsx|\.json|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\.tar\.gz|\.tgz|\.bak|\.7z|\.rar|\.log|\.cache|\.secret|\.db|\.backup|\.yml|\.gz|\.config|\.csv|\.yaml|\.md|\.env|\.ini|\.git' bmw_all_urls_clean.txt > bmw_juicy_files.txt
+cat all_urls.txt | uro > all_urls_clean.txt
 ```
 
-## Direct CDX Filter (Only Juicy Files)
+## 3️⃣ Extract Juicy / Sensitive File Extensions
 
 ```bash
-curl "https://web.archive.org/cdx/search/cdx?url=*.bmw.de/*&collapse=urlkey&output=text&fl=original&filter=original:.*\.(xls|xml|xlsx|json|pdf|sql|doc|docx|pptx|txt|zip|tar\.gz|tgz|bak|7z|rar|log|cache|secret|db|backup|yml|gz|config|csv|yaml|md|env|ini|git)$" | tee bmw_filtered_urls.txt
+grep -Ei '\.(pdf|doc|docx|xls|xlsx|csv|txt|log|bak|backup|old|zip|rar|7z|tar|gz|sql|db|env|ini|conf|config|yml|yaml|json|git)$' all_urls_clean.txt > juicy_files.txt
 ```
 
-## Browser View (Manual Hunting/optional)
-
-```
-https://web.archive.org/web/*/bmw.de/*
-```
-
-## Robots.txt (Historical/optional)
-
-```
-https://web.archive.org/web/*/bmw.de/robots.txt
-```
-
-## Find PDFs with Sensitive Keywords
+## 4️⃣ CDX Direct Filter (High Signal)
 
 ```bash
-cat bmw_filtered_urls.txt | grep -Ei '\.pdf' | while read -r url; do
-
-curl -s "$url" | pdftotext - - | grep -Eaiq '(confidential|internal|restricted|private|do not share|proprietary|invoice|salary|contract|agreement|passport|identity|bank|credit card)' && echo "$url"
-done
+curl "https://web.archive.org/cdx/search/cdx?url=*.$TARGET_DOMAIN/*&collapse=urlkey&output=text&fl=original&filter=original:.*\.(pdf|doc|docx|xls|xlsx|csv|txt|log|bak|zip|rar|sql|db|env|ini|yml|yaml|json|git)$" | tee cdx_filtered.txt
 ```
 
-## Golden Method – Deleted (404) Files
+## 5️⃣ Identify LIVE vs DEAD URLs
 
-```
-https://web.archive.org/web/*/<PASTE_404_URL_HERE>
-```
-more if ded files
-## 1️⃣ Filter ONLY Live URLs (200/3xx)
+### ✅ Live URLs (200 / Redirects)
 
 ```bash
-cat bmw_all_urls_clean.txt | httpx -mc 200,301,302,307,308 -silent > bmw_alive.txt
+cat all_urls_clean.txt | httpx -mc 200,301,302,307,308 -silent > alive.txt
 ```
 
-## 2️⃣ Separate Dead URLs (404 / Gone)
+### ❌ Dead URLs (404 / Gone)
 
 ```bash
-cat bmw_all_urls_clean.txt | httpx -mc 404,410 -silent > bmw_dead.txt
+cat all_urls_clean.txt | httpx -mc 404,410 -silent > dead.txt
 ```
 
-## 3️⃣ Recover Dead URLs via Wayback (Golden Fix)
+## 6️⃣ GOLDEN METHOD – Recover Dead Files via Wayback
 
 ```bash
-cat bmw_dead.txt | while read url; do
+cat dead.txt | while read url; do
   echo "https://web.archive.org/web/*/$url"
-done > bmw_dead_wayback.txt
+done > dead_wayback.txt
 ```
 
-Open `bmw_dead_wayback.txt` in browser → pick **older snapshot**.
+➡️ Open `dead_wayback.txt` in browser
+➡️ Choose **older snapshot**
+➡️ Download sensitive files
 
-
-## 4️⃣ Check If Files Still Downloadable (Even If 404)
+## 7️⃣ Find Still-Downloadable Sensitive Files
 
 ```bash
-cat bmw_juicy_files.txt | httpx -mc 200,206 -silent > bmw_juicy_alive.txt
+cat juicy_files.txt | httpx -mc 200,206 -silent > juicy_alive.txt
 ```
 
-## 5️⃣ Wayback Download Instead of Live Site
+## 8️⃣ PDF-Only Sensitive Keyword Scan (HIGH VALUE)
 
 ```bash
-cat bmw_filtered_urls.txt | while read url; do
-  curl -s "https://web.archive.org/cite/$url" >> bmw_wayback_content.txt
+grep -Ei '\.pdf$' cdx_filtered.txt | while read -r url; do
+  curl -s "$url" | pdftotext - - 2>/dev/null | \
+  grep -Eaiq '(confidential|internal|restricted|private|do not share|proprietary|invoice|salary|contract|agreement|identity|bank)' \
+  && echo "$url"
 done
-
 ```
 
-## 6️⃣ Prioritize High-Value Files (Bug Bounty)
+## 9️⃣ JS Files (Secrets / Endpoints)
 
 ```bash
-grep -Ei '\.pdf|\.xls|\.xlsx|\.docx|\.sql|\.env|\.zip|\.bak|\.log' bmw_filtered_urls.txt > bmw_high_value.txt
+grep -Ei '\.js$' alive.txt > js_files.txt
 ```
 
-## 7️⃣ Find Still-Alive Sensitive Paths
+## 🔟 Robots / Sitemap (Historical)
+
+```
+https://web.archive.org/web/*/TARGET_DOMAIN/robots.txt
+https://web.archive.org/web/*/TARGET_DOMAIN/sitemap.xml
+```
+
+## 1️⃣1️⃣ Internal / Admin / Debug Paths
 
 ```bash
-cat bmw_high_value.txt | httpx -status-code -title -content-length
+grep -Ei 'admin|internal|config|debug|test|backup|private|hidden|_admin|_config' alive.txt > internal_paths.txt
 ```
 
+## 1️⃣2️⃣ Parameters That May Leak Data
+
+```bash
+grep -Ei '\?|=|token|key|auth|session|id=' alive.txt > param_urls.txt
+```
+
+## 1️⃣3️⃣ FINAL – Information Disclosure Candidates
+
+```bash
+cat juicy_alive.txt js_files.txt internal_paths.txt param_urls.txt | sort -u > info_disclosure_final.txt
+```
