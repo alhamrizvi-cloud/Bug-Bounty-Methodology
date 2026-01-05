@@ -5,7 +5,7 @@
 ```bash
 gau target.com | uro | grep "=" > parameter.txt
 ```
-
+or if you have parameter.txt file
 ### Filter Redirect Parameters
 
 ```bash
