@@ -21,7 +21,7 @@
 
 - **[Open Redirect](open_redirect_testing.md)**
 - **[Information Disclosure](information-disclosure.md)**
-
+- **[Host Header Injection](host-header-injection.md)**
 
 ## 1. Passive Subdomain Enumeration
 
