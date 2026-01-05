@@ -52,13 +52,54 @@ done
 ```
 https://web.archive.org/web/*/<PASTE_404_URL_HERE>
 ```
-
-## One-Shot Automation (bmw.de)
+more if ded files
+## 1️⃣ Filter ONLY Live URLs (200/3xx)
 
 ```bash
-bash wayback.sh
+cat bmw_all_urls_clean.txt | httpx -mc 200,301,302,307,308 -silent > bmw_alive.txt
 ```
 
+## 2️⃣ Separate Dead URLs (404 / Gone)
+
+```bash
+cat bmw_all_urls_clean.txt | httpx -mc 404,410 -silent > bmw_dead.txt
 ```
-bmw.de
+
+## 3️⃣ Recover Dead URLs via Wayback (Golden Fix)
+
+```bash
+cat bmw_dead.txt | while read url; do
+  echo "https://web.archive.org/web/*/$url"
+done > bmw_dead_wayback.txt
 ```
+
+Open `bmw_dead_wayback.txt` in browser → pick **older snapshot**.
+
+
+## 4️⃣ Check If Files Still Downloadable (Even If 404)
+
+```bash
+cat bmw_juicy_files.txt | httpx -mc 200,206 -silent > bmw_juicy_alive.txt
+```
+
+## 5️⃣ Wayback Download Instead of Live Site
+
+```bash
+cat bmw_filtered_urls.txt | while read url; do
+  curl -s "https://web.archive.org/cite/$url" >> bmw_wayback_content.txt
+done
+
+```
+
+## 6️⃣ Prioritize High-Value Files (Bug Bounty)
+
+```bash
+grep -Ei '\.pdf|\.xls|\.xlsx|\.docx|\.sql|\.env|\.zip|\.bak|\.log' bmw_filtered_urls.txt > bmw_high_value.txt
+```
+
+## 7️⃣ Find Still-Alive Sensitive Paths
+
+```bash
+cat bmw_high_value.txt | httpx -status-code -title -content-length
+```
+
