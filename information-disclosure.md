@@ -26,13 +26,13 @@ grep -E '\.xls|\.xml|\.xlsx|\.json|\.pdf|\.sql|\.doc|\.docx|\.pptx|\.txt|\.zip|\
 curl "https://web.archive.org/cdx/search/cdx?url=*.bmw.de/*&collapse=urlkey&output=text&fl=original&filter=original:.*\.(xls|xml|xlsx|json|pdf|sql|doc|docx|pptx|txt|zip|tar\.gz|tgz|bak|7z|rar|log|cache|secret|db|backup|yml|gz|config|csv|yaml|md|env|ini|git)$" | tee bmw_filtered_urls.txt
 ```
 
-## Browser View (Manual Hunting)
+## Browser View (Manual Hunting/optional)
 
 ```
 https://web.archive.org/web/*/bmw.de/*
 ```
 
-## Robots.txt (Historical)
+## Robots.txt (Historical/optional)
 
 ```
 https://web.archive.org/web/*/bmw.de/robots.txt
