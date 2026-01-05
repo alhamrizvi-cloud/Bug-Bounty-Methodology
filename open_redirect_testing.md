@@ -18,11 +18,14 @@ grep -Ei "redirect|url|next|return|dest|continue|callback|goto|forward|out|view"
 sed 's/=.*/=https:\/\/evil.com/' redirect_params.txt > basic_redirect.txt
 ```
 
-### Automated Detection
+### Automated Detection(Must use in ALL open redirect payloads to test)
 
 ```bash
 httpx -l basic_redirect.txt -location -mc 301,302,307,308 -silent
 ```
+use curl -I "URL_HERE" | grep -i location to check manually
+eg. curl -I "https://bmw.de/vc/ncc/xhtml/start/startWithConfigUrl.faces;jsessionid=https://evil.com"
+
 
 ## Slash & Protocol Confusion Tricks
 
