@@ -24,6 +24,11 @@
    1. Open Redirect 
   </button>
 </a>
+<a href="information-disclosure.md">
+  <button style="padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:6px;">
+   2. Information Disclosure 
+  </button>
+</a>
 
 ---
 
