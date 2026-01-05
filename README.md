@@ -17,6 +17,14 @@
 * [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
 * [14. CMD Injection](#14-cmd-injection)
 
+## Other Stuff
+
+<a href="open_redirect_testing.md">
+  <button style="padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:6px;">
+   1. Open Redirect 
+  </button>
+</a>
+
 ---
 
 ## 1. Passive Subdomain Enumeration
