@@ -16,21 +16,12 @@
 * [12. My XSS Workflow](#12-my-xss-workflow)
 * [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
 * [14. CMD Injection](#14-cmd-injection)
-
+  
 ## Other Stuff
 
-<a href="open_redirect_testing.md">
-  <button style="padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:6px;">
-   1. Open Redirect 
-  </button>
-</a>
-<a href="information-disclosure.md">
-  <button style="padding:10px 16px; background:#2563eb; color:white; border:none; border-radius:6px;">
-   2. Information Disclosure 
-  </button>
-</a>
+- **[Open Redirect](open_redirect_testing.md)**
+- **[Information Disclosure](information-disclosure.md)**
 
----
 
 ## 1. Passive Subdomain Enumeration
 
