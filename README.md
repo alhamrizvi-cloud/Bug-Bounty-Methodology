@@ -23,6 +23,7 @@
 - **[Information Disclosure](information-disclosure.md)**
 - **[Host Header Injection](host-header-injection.md)**
 - **[Local File Inclusion](lfi.md)**
+- **[XSS Methdology](xss.md)**
 
 ## 1. Passive Subdomain Enumeration
 
