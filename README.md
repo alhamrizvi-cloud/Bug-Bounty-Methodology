@@ -16,6 +16,7 @@
 ## Other Stuff
 
 - **[Open Redirect](open_redirect_testing.md)**
+- **[Subdomain Takeover](subdtakeover.md)**
 - **[Information Disclosure](information-disclosure.md)**
 - **[Host Header Injection](host-header-injection.md)**
 - **[Local File Inclusion](lfi.md)**
