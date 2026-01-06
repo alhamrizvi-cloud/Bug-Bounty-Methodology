@@ -12,7 +12,6 @@
 * [8. Cloud Asset Enumeration](#8-cloud-asset-enumeration)
 * [9. API Enumeration](#9-api-enumeration)
 * [10. Subdomain Takeover](#10-subdomain-takeover)
-* [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
   
 ## Other Stuff
 
@@ -277,14 +276,4 @@ s3scanner scan --bucket target-bucket
 
 ```bash
 kr scan https://api.target.com -w /usr/share/kiterunner/routes-large.kite -o api_routes.txt
-```
-
----
-
-## 10. Subdomain Takeover
-
-```bash
-subzy run --targets bmw_resolved.txt --hide-fails
-subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
-subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 ```
