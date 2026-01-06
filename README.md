@@ -1,6 +1,6 @@
 
 
-## Index
+## Recon 
 
 * [1. Passive Subdomain Enumeration](#1-passive-subdomain-enumeration)
 * [2. Active Subdomain Discovery](#2-active-subdomain-discovery)
@@ -13,7 +13,7 @@
 * [9. API Enumeration](#9-api-enumeration)
 * [10. Subdomain Takeover](#10-subdomain-takeover)
   
-## Other Stuff
+## Bug Hunting
 
 - **[Open Redirect](open_redirect_testing.md)**
 - **[Subdomain Takeover](subdtakeover.md)**
