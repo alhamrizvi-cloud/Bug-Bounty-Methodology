@@ -22,6 +22,7 @@
 - **[Local File Inclusion](lfi.md)**
 - **[XSS Methdology](xss.md)**
 - **[Command Injection](cmdi.md)**
+- **[IDOR Paremeter Finding](idor.md)**
 
 ## 1. Passive Subdomain Enumeration
 
