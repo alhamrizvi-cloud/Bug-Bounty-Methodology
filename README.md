@@ -287,17 +287,3 @@ subzy run --targets bmw_resolved.txt --hide-fails
 subzy run --targets bmw_resolved.txt --verify_ssl --concurrency 20
 subzy run --targets bmw_resolved.txt | tee subzy_results.txt
 ```
-
----
-
-## 13. IDOR Parameter Fetch
-
-**Requirement:** `parameter.txt`
-```bash
-grep -Ei "(\\?|&)(VPNR|OutletID|page|session|wer|go2|bmw)=" www.bmw.de.txt > idor_only.txt
-grep -Ev "lb(matchtype|creative|network|keyword)|gclid=|tl=" idor_only.txt > idor_clean1.txt
-grep -Ei "(VPNR=|OutletID=|session=|wer=)" idor_clean1.txt > idor_clean2.txt
-sort -u idor_clean2.txt > idor_final.txt
-```
-
----
