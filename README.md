@@ -12,10 +12,7 @@
 * [8. Cloud Asset Enumeration](#8-cloud-asset-enumeration)
 * [9. API Enumeration](#9-api-enumeration)
 * [10. Subdomain Takeover](#10-subdomain-takeover)
-* [11. XSS Automation](#11-xss-automation)
-* [12. My XSS Workflow](#12-my-xss-workflow)
 * [13. IDOR Parameter Fetch](#13-idor-parameter-fetch)
-* [14. CMD Injection](#14-cmd-injection)
   
 ## Other Stuff
 
@@ -24,6 +21,7 @@
 - **[Host Header Injection](host-header-injection.md)**
 - **[Local File Inclusion](lfi.md)**
 - **[XSS Methdology](xss.md)**
+- **[Command Injection](cmdi.md)**
 
 ## 1. Passive Subdomain Enumeration
 
