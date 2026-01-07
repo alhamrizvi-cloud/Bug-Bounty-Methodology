@@ -25,7 +25,7 @@
 - **[18. IDOR Paremeter Finding](idor.md)**
 - **[19. HTML Injection](htmli.md)**
 - **[20. Wordpress Vulnerabilities](wpvuln.md)**
-- **[21. SQL Injection](wpvuln.md)**
+- **[21. SQL Injection](sqli.md)**
 
 ## 1. Passive Subdomain Enumeration
 
