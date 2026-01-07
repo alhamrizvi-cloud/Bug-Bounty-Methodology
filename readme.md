@@ -26,6 +26,7 @@
 - **[19. HTML Injection](htmli.md)**
 - **[20. Wordpress Vulnerabilities](wpvuln.md)**
 - **[21. SQL Injection](sqli.md)**
+- **[22. Directory Traversal](dirtrav.md)**
 
 ## 1. Passive Subdomain Enumeration
 
