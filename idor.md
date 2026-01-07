@@ -1,6 +1,6 @@
 ## IDOR Parameter Fetch
 
-**Requirement:** `parameter.txt` also it depends on your txt file, coy the first 50 lines of your txt file aand send it to chatgpt and ask it give commands to fetch idor parameters from this file,
+**Requirement:** `parameter.txt` also it depends on your txt file, copy the first 50 lines of your txt file aand send it to chatgpt and ask it give commands to fetch idor parameters from this file,
 
 this is just an example
 
