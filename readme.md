@@ -23,6 +23,7 @@
 - **[XSS Methdology](xss.md)**
 - **[Command Injection](cmdi.md)**
 - **[IDOR Paremeter Finding](idor.md)**
+- **[HTML Injection](htmli.md)**
 
 ## 1. Passive Subdomain Enumeration
 
