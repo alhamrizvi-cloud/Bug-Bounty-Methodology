@@ -16,14 +16,14 @@
 ## Bug Hunting
 
 - **[11. Open Redirect](open_redirect_testing.md)**
-- **[Subdomain Takeover](subdtakeover.md)**
-- **[Information Disclosure](information-disclosure.md)**
-- **[Host Header Injection](host-header-injection.md)**
-- **[Local File Inclusion](lfi.md)**
-- **[XSS Methdology](xss.md)**
-- **[Command Injection](cmdi.md)**
-- **[IDOR Paremeter Finding](idor.md)**
-- **[HTML Injection](htmli.md)**
+- **[12. Subdomain Takeover](subdtakeover.md)**
+- **[13. Information Disclosure](information-disclosure.md)**
+- **[14. Host Header Injection](host-header-injection.md)**
+- **[15. Local File Inclusion](lfi.md)**
+- **[16. XSS Methdology](xss.md)**
+- **[17. Command Injection](cmdi.md)**
+- **[18. IDOR Paremeter Finding](idor.md)**
+- **[19. HTML Injection](htmli.md)**
 
 ## 1. Passive Subdomain Enumeration
 
