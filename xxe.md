@@ -1,4 +1,4 @@
-# XXE Injection – ONLY 2 TOOLS
+# XXE Injection
 
 ## Tool 1: **XXEinjector** (BEST OVERALL)
 
