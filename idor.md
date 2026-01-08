@@ -10,3 +10,7 @@ grep -Ev "lb(matchtype|creative|network|keyword)|gclid=|tl=" idor_only.txt > ido
 grep -Ei "(VPNR=|OutletID=|session=|wer=)" idor_clean1.txt > idor_clean2.txt
 sort -u idor_clean2.txt > idor_final.txt
 ```
+
+## Burp Extensions:
+
+https://github.com/Quitten/Autorize
