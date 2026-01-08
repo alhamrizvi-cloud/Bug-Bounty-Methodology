@@ -1,0 +1,14 @@
+127.0.0.1
+localhost
+0.0.0.0
+::1
+10.0.0.1
+192.168.0.1
+evil.com
+attacker.com
+example.com.evil.com
+test%0d%0aInjected-Header:test
+%0d%0aSet-Cookie:evil=1
+"><script>alert(1)</script>
+"><img src=x onerror=alert(1)>
+%0d%0aLocation:https://evil.com
