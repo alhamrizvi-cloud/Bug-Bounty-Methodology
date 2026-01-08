@@ -28,6 +28,7 @@
 - **[21. SQL Injection](sqli.md)**
 - **[22. Directory Traversal](dirtrav.md)**
 - **[23. Header Injection](headeri.md)**
+- **[24. Race Conditions](race.md)**
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
