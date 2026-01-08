@@ -7,15 +7,7 @@
 * **Vulnerable XML endpoint**
 * **XML request body**
 * **Target URL**
-* **Parameter** accepting XML
-* 
-### ▶️ Install
-
-```bash
-git clone https://github.com/enjoiz/XXEinjector.git
-cd XXEinjector
-chmod +x XXEinjector.rb
-```
+* **Parameter** accepting XML 
 
 ### ▶️ Basic XXE Test
 
