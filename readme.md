@@ -27,7 +27,7 @@
 - **[20. Wordpress Vulnerabilities](wpvuln.md)**
 - **[21. SQL Injection](sqli.md)**
 - **[22. Directory Traversal](dirtrav.md)**
-- **[22. Header Injection](headeri.md)**
+- **[23. Header Injection](headeri.md)**
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
