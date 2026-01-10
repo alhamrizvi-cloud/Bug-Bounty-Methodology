@@ -30,6 +30,7 @@
 - **[23. Header Injection](headeri.md)**
 - **[24. Race Conditions](race.md)**
 - **[24. XXE Injection](xxe.md)**
+- **[25. SSTI Injection](ssti.md)**
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
