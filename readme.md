@@ -100,7 +100,21 @@ cat bmw7.txt | dnsx -silent > bmw8.txt
 ### Gobuster DNS
 
 ```bash
-gobuster dns -d target.com -w dns_wordlist.txt -o gobuster_subs.txt
+gobuster dns \
+  -d dailymotion.com \
+  -w /home/alham/SecLists/Discovery/DNS/subdomains-top1million-110000.txt \
+  -t 50 \
+  --timeout 3s \
+  -o gobuster_subs.txt
+```
+### PureDNS
+
+```bash
+puredns bruteforce \
+  /home/alham/SecLists/Discovery/DNS/subdomains-top1million-110000.txt \
+  dailymotion.com \
+  --resolvers resolvers.txt \
+  --write puredns_subs.txt
 ```
 
 ### ShuffleDNS
