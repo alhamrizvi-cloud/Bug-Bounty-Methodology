@@ -116,6 +116,21 @@ puredns bruteforce \
   --resolvers resolvers.txt \
   --write puredns_subs.txt
 ```
+### MassDNS
+
+```bash
+massdns \
+  -r resolvers.txt \
+  -t A \
+  -o S \
+  subdomains.txt \
+  > massdns_raw.txt
+
+Parse results:
+
+grep " A " massdns_raw.txt | cut -d' ' -f1 | sed 's/\.$//' > massdns_subs.txt
+
+```
 
 ### ShuffleDNS
 
