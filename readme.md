@@ -260,12 +260,16 @@ cat dailylive.txt | hakrawler > hakrawler.txt
 feroxbuster -u https://target.com -d 2 -q -o ferox_urls.txt
 ```
 
-### Remove noise from parameters
+
+### Get Alive host
 
 ```bash
-katana -list dailylive.txt -jc -kf -silent |
-grep -Evi '\.(png|jpg|jpeg|gif|svg|css|woff|woff2|ttf|eot|ico|mp4|webm|avi|map|pdf)$' |
-uro > katana_clean.txt
+cat finalurls.txt \
+| awk -F/ '{print $1"//"$3}' \
+| sort -u \
+| ~/go/bin/httpx -silent -mc 200,301,302,403 \
+> alive_hosts.txt
+
 ```
 
 ---
