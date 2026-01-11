@@ -246,7 +246,12 @@ gospider -S live_websites.txt -d 2 -o gospider_output/
 ### Hakrawler
 
 ```bash
-cat live_websites.txt | hakrawler -depth 3 -plain -out hakrawler_results.txt
+cat live_websites.txt | hakrawler -d 3 -subs -u > hakrawler_results.txt
+
+or
+
+cat dailylive.txt | hakrawler > hakrawler.txt
+
 ```
 
 ### Feroxbuster
