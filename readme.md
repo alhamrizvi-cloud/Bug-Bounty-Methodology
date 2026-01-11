@@ -260,6 +260,14 @@ cat dailylive.txt | hakrawler > hakrawler.txt
 feroxbuster -u https://target.com -d 2 -q -o ferox_urls.txt
 ```
 
+### Remove noise from parameters
+
+```bash
+katana -list dailylive.txt -jc -kf -silent |
+grep -Evi '\.(png|jpg|jpeg|gif|svg|css|woff|woff2|ttf|eot|ico|mp4|webm|avi|map|pdf)$' |
+uro > katana_clean.txt
+```
+
 ---
 
 ## 7. Archive & Parameter Discovery
