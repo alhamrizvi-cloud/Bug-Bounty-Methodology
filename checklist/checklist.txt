@@ -1,0 +1,100 @@
+### Tier 1
+
+**🧭 Recon & Setup**
+
+* [ ] Program rules & scope review
+* [ ] Target mapping & asset identification
+* [ ] Subdomain enumeration
+* [ ] Live host identification
+* [ ] Screenshot & visual recon
+* [ ] Port & service scanning
+* [ ] JavaScript file analysis
+* [ ] GitHub & source code recon
+* [ ] Cloud & storage recon (AWS/GCP/Firebase)
+* [ ] Shodan & internet-wide recon
+* [ ] Param discovery
+
+**Low-Hanging Fruits (Quick Wins)**
+
+* [ ] Subdomain Takeover
+* [ ] Security misconfigurations
+* [ ] Missing / weak HTTP security headers
+* [ ] robots.txt & sitemap analysis
+* [ ] Directory & file brute-forcing
+* [ ] Open redirect testing
+* [ ] IDOR (Broken Object Level Authorization)
+* [ ] No rate-limit issues
+* [ ] File upload issues
+* [ ] Information disclosure
+
+**Core Web Vulnerabilities**
+
+* [ ] Cross-Site Scripting (XSS)
+* [ ] Blind XSS
+* [ ] Content Security Policy (CSP) bypass
+* [ ] Cross-Site Request Forgery (CSRF)
+* [ ] HTML injection
+* [ ] Host header injection
+* [ ] Local File Inclusion (LFI)
+* [ ] Server-Side Request Forgery (SSRF)
+* [ ] SQL injection (SQLi)
+* [ ] Command injection
+
+**Authentication & Session Issues**
+
+* [ ] Authentication bypass
+* [ ] Password reset vulnerabilities
+* [ ] Session fixation & hijacking
+* [ ] JWT vulnerabilities
+* [ ] 2FA / MFA misconfigurations
+
+**Business Logic & Abuse**
+
+* [ ] Price manipulation
+* [ ] Coupon & discount abuse
+* [ ] Race conditions
+* [ ] Workflow bypass
+* [ ] Privilege escalation
+
+**API & Modern Attack Surface**
+
+* [ ] API authorization issues
+* [ ] Mass assignment
+* [ ] API IDOR
+* [ ] API rate-limit issues
+* [ ] API injection flaws
+
+### 🧩 Advanced & Specialized Attacks
+
+* [ ] XML External Entity (XXE)
+* [ ] WebSocket vulnerabilities
+* [ ] HTTP request smuggling / desync
+* [ ] WordPress vulnerabilities
+* [ ] Exif metadata leakage
+* [ ] Geolocation data exposure
+
+### 🤖 Automation & Tooling
+
+* [ ] Nuclei scanning
+* [ ] Custom nuclei template testing
+* [ ] Automated recon validation
+* [ ] Manual verification of findings
+
+### 🧠 Emerging & Advanced Topics
+
+* [ ] LLM / AI prompt injection
+* [ ] AI data leakage testing
+
+### 📝 Reporting & Workflow
+
+* [ ] Valid bug confirmation
+* [ ] Impact analysis
+* [ ] Proof-of-concept creation
+* [ ] Report writing & submission
+* [ ] Bug triage & response handling
+
+### 🎯 Live Hunting Practice
+
+* [ ] Live bug hunting sessions
+* [ ] Real-world target testing
+* [ ] Doubt-clearing & review
