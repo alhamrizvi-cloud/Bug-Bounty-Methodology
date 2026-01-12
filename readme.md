@@ -331,4 +331,11 @@ s3scanner scan --bucket target-bucket
 
 ```bash
 kr scan https://api.target.com -w /usr/share/kiterunner/routes-large.kite -o api_routes.txt
+
+or
+grep -Ei '(^|\.)(api|graphql|rest|v[0-9])(\.|$)' urls.txt \
+| sort -u \
+> api_enndpoints.txt
+
+
 ```
