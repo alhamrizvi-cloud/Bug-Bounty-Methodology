@@ -31,6 +31,7 @@
 - **[24. Race Conditions](race.md)**
 - **[24. XXE Injection](xxe.md)**
 - **[25. SSTI Injection](ssti.md)**
+- **[26. Spring Boot Actuator Exploitation](spring.md)**
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
