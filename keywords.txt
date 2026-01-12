@@ -1,0 +1,25 @@
+*.js, *.mjs, *.cjs, *.js.map, *.map, *.json, .env, .env.local, *.local, config/*.js, src/config/*.js, and HTML files with inline <script> blocks.
+
+3. Keywords and Patterns to Scan For
+
+Common keywords:
+apikey api_key api-key apiKey
+access_token access-token token
+secret secret_key secretKey
+passwd password pwd
+auth auth_token authKey
+client_id client_secret
+aws_access_key_id aws_secret_access_key
+bearer jwt oauth refresh_token
+private_key pem rsa_private
+db_password database_password connection_string
+stripe_key stripe_secret
+sendgrid twilio slack_token
+gcp google_api_key firebase
+sentry_dsn encryption_key ssh_key
+
+Useful regex patterns:
+
+[A-Za-z0–9+/]{40,}={0,2} (base64 strings)
+^[A-Za-z0–9_-]+\.[A-Za-z0–9_-]+\.[A-Za-z0–9_-]+$ (JWT)
+AKIA[0–9A-Z]{16} (AWS key)
