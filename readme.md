@@ -33,6 +33,7 @@
 - **[25. SSTI Injection](ssti.md)**
 - **[26. Spring Boot Actuator Exploitation](spring.md)**
 - **[27. Blind XSS](blindxss.md)**
+- **[27. CRLF Injection](crlfi.md)**
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
