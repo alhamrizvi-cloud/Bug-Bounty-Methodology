@@ -1,82 +1,36 @@
 ### Tool: **headi** 
 
-## 📁 Required Files (Minimal)
+## 📁 Required Files
 
-### `urls.txt`  ✅ (REQUIRED)
+### `subdomains.txt`  ✅ 
 
-### `headers.txt`  ✅ (REQUIRED)
-I have provided header.txt on the payloads folder > Header INjection > headers.txt on our repo,
-eg.
-```
-X-Forwarded-For
-X-Client-IP
-X-Real-IP
-X-Originating-IP
-Referer
-User-Agent
-```
-
-### `payloads.txt`  ✅ (OPTIONAL but recommended)
-
-Payloads for header values
-I have provided header.txt on the payloads folder > Header INjection > headerspayloads.txt on our repo,
-```
-127.0.0.1
-localhost
-evil.com
-"><script>alert(1)</script>
-```
-
-## Basic Header Injection Scan
+### ✅ **1️⃣ Add trailing slash (headi-safe URLs)**
 
 ```bash
-python3 headi.py -u https://example.com
+sed 's|$|/|' subd.txt > dailymotion_slash.txt
 ```
 
-## Scan Multiple URLs (urls.txt)
+---
+
+### ✅ **2️⃣ (Optional but recommended) remove empty / bad lines**
 
 ```bash
-python3 headi.py -l urls.txt
+grep -E '^https?://' dailymotion_slash.txt > dailymotion_headi.txt
 ```
 
-## Inject Custom Headers Only
+---
+
+### ✅ **3️⃣ Run headi in parallel**
 
 ```bash
-python3 headi.py -l urls.txt -H headers.txt
+cat dailymotion_headi.txt | xargs -P10 -I{} headi -u {}
 ```
 
-## Inject Headers with Payloads (MAIN COMMAND)
+---
+
+## 🧠 One‑liner version (if you want it compact)
 
 ```bash
-python3 headi.py -l urls.txt -H headers.txt -p payloads.txt
+sed 's|$|/|' dailymotion_clean.txt | grep -E '^https?://' | xargs -P10 -I{} headi -u {}
 ```
 
-## Test Single Header Manually
-
-```bash
-python3 headi.py -u https://example.com -h "X-Forwarded-For: 127.0.0.1"
-```
-
-## Save Output
-
-```bash
-python3 headi.py -l urls.txt -H headers.txt -p payloads.txt -o headi_output.txt
-```
-
-## Silent Mode (Clean Output)
-
-```bash
-python3 headi.py -l urls.txt -H headers.txt -p payloads.txt --silent
-```
-
-## Typical Workflow (Copy–Paste Ready)
-
-```bash
-python3 headi.py -l urls.txt -H headers.txt -p payloads.txt -o header_injection_results.txt
-```
-## Notes (Very Short)
-
-* `urls.txt` → **mandatory**
-* `headers.txt` → controls **which headers**
-* `payloads.txt` → controls **what gets injected**
-* Works for **host injection, cache poisoning, auth bypass, IP trust issues**
