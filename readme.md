@@ -35,8 +35,8 @@
 - **[27. Blind XSS](blindxss.md)**
 - **[28. CRLF Injection](crlfi.md)**
 - **[29. Nuclei Cheatsheet](nuclei.md)**
-- **[29. CORS Misconfiguration](cors.md)**
-- **[29. Web Cache Poisoning](cachepoison.md)**
+- **[30. CORS Misconfiguration](cors.md)**
+- **[31. Web Cache Poisoning](cachepoison.md)**
 ## 1. Passive Subdomain Enumeration
 
 ### Subfinder
