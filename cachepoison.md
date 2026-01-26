@@ -93,3 +93,4 @@ Then reload without header → see if poison persists.
 ```bash
 gau target.com | httpx -silent | toxicache scan -c 50
 ```
+use url file not subd file
