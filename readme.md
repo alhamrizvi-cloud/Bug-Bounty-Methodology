@@ -1,4 +1,11 @@
+Yo everyone 👋
+This repository contains complete bug hunting automation along with a full cheat sheet of commands and methodologies.
 
+It is completely open and free to use.
+
+Please do not repost or redistribute it anywhere without giving proper credit to the repository. Many bug hunters have worked very hard to build and contribute to this project.
+
+Let’s respect the effort and support the community ❤️
 
 ## Recon 
 
