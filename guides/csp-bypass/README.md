@@ -1,0 +1,2 @@
+# CSP Bypass
+
